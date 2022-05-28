@@ -1,0 +1,527 @@
+select * from [Personal Key Indicators of Heart Disease 2020]
+select BMI, sex from [Personal Key Indicators of Heart Disease 2020] order by 1
+select 5.5
+
+--select everything:
+select * from [Personal Key Indicators of Heart Disease 2020]
+/*select 
+everything:*/select 5.5
+
+select distinct sex from [Personal Key Indicators of Heart Disease 2020]
+
+select count(*) from [Personal Key Indicators of Heart Disease 2020]
+select count(*) as [total rows] from [Personal Key Indicators of Heart Disease 2020]
+
+select (select count(*) from [Personal Key Indicators of Heart Disease 2020])/(select count(*) from [Personal Key Indicators of Heart Disease 2020])
+
+select distinct agecategory from [Personal Key Indicators of Heart Disease 2020]
+select count(distinct agecategory) from [Personal Key Indicators of Heart Disease 2020]
+select sum(distinct cast(bmi as decimal(10,2))) from [Personal Key Indicators of Heart Disease 2020]
+
+select * from [Personal Key Indicators of Heart Disease 2020] where sex!='male'
+select * from [Personal Key Indicators of Heart Disease 2020] where sex is null
+select bmi from [Personal Key Indicators of Heart Disease 2020] where cast(bmi as decimal(10,2)) between 10 and 20 order by bmi
+
+select * from [Personal Key Indicators of Heart Disease 2020] where not sex='male' and not agecategory='18-24'
+select * from [Personal Key Indicators of Heart Disease 2020] where not (sex='male' and agecategory='18-24') order by agecategory, sex
+
+insert into [Personal Key Indicators of Heart Disease 2020] (heartdisease)
+select heartdisease from [Personal Key Indicators of Heart Disease 2020]
+where sex='male' and agecategory='70-74'
+
+select * from [Personal Key Indicators of Heart Disease 2020] where bmi is null
+
+insert into [Personal Key Indicators of Heart Disease 2020]
+select * from [Personal Key Indicators of Heart Disease 2020]
+where sex='male' and agecategory='45-49'
+
+select * from [Personal Key Indicators of Heart Disease 2020] where sex='male' and agecategory='45-49'
+
+insert into [Personal Key Indicators of Heart Disease 2020] (bmi)
+values ('5')
+
+select * from [Personal Key Indicators of Heart Disease 2020]
+where bmi='5'
+
+select * from [Personal Key Indicators of Heart Disease 2020]
+where (bmi and heartdisease) is null
+
+insert into [Personal Key Indicators of Heart Disease 2020] (bmi)
+values ('')
+
+select * from [Personal Key Indicators of Heart Disease 2020]
+where bmi=''
+
+select heartdisease, bmi, heartdisease+bmi as combination from [Personal Key Indicators of Heart Disease 2020] where heartdisease is null
+
+select heartdisease, bmi, isnull(heartdisease, 3)+cast(bmi as decimal(2,0)) as combination 
+from [Personal Key Indicators of Heart Disease 2020] 
+where bmi='5'
+
+select isnull('hello', 'test')
+select isnull(null, 'test')
+
+select heartdisease, iif(heartdisease='yes', 'too bad', 'ok') 
+from [Personal Key Indicators of Heart Disease 2020]
+
+select heartdisease, 
+case
+when heartdisease='yes' then 'too bad'
+else 'ok'
+end as alternative
+from [Personal Key Indicators of Heart Disease 2020]
+
+select * from [Personal Key Indicators of Heart Disease 2020] where bmi is null
+update [Personal Key Indicators of Heart Disease 2020] set smoking='No' where bmi is null
+
+select * from customers
+delete from customers where customername='alfreds futterkiste'
+
+select * from customers where country='mexico'
+select top 3 * from customers where country='mexico'
+select top 75 percent * from customers where country='mexico'
+select top 3 * from customers where country='mexico' order by customerid desc
+
+select * from products where price is not null order by price
+select min(price) from products
+select max(price) from products
+select avg(price) from products
+select count(price) from products
+
+select * from customers where customername like '%eugene%'
+select * from customers where city like 's%' or city like '%s'
+
+select 'eugene o_neill'
+select 'don"t'
+select * from customers order by customername
+select * from customers where customername like '%app_'
+select * from customers where customername like 'd_%_%'
+select * from customers where customername like 'd__%'
+select * from customers where customername like 'd%'
+
+select * from customers where city like '[a-c]%[a-c]'
+
+select * from customers where country in ('mexico', 'uk')
+
+select * from suppliers
+select * from customers where country in (select country from suppliers)
+
+select * from products where price between 10 and 20 and categoryid not in (1,2,3)
+
+select * from orders where orderdate between '1996/7/1' and '1996/7/31'
+select * from orders where orderdate between '1996-7-1' and '1996-7-31'
+
+select 5.93 as 'test number'
+
+select * from customers
+select trim(address)+', '+trim(str(postalcode))+', '+city+', '+country from customers
+select concat(address,', ',postalcode,', ',city,', ',country) from customers
+select concat_ws(', ',address,postalcode,city,country) from customers
+
+insert into customers (city)
+values ('athens greece')
+select city from customers where city like concat('%',country,'%')
+
+select orders.orderid, customers.customername, shippers.shippername, order_details.quantity
+from customers
+inner join orders on orders.customerid=customers.customerid and customers.customerid=5
+inner join shippers on orders.shipperid=shippers.shipperid
+inner join order_details on order_details.orderid=orders.orderid
+
+select a.customername, b.customername, a.city
+from customers a, customers b
+where a.customerid<>b.customerid
+and a.city=b.city
+order by a.city
+
+select *, count(*) over (partition by country order by country) from customers 
+
+select contactname, city, country from customers
+union all
+select contactname, city, country from suppliers
+
+select count(customerid) from customers
+group by country
+
+select * from customers where customers.customername='around the horn'
+select * from orders where customerid=4
+
+select * from customers
+inner join orders on customers.customerid=orders.customerid
+
+select * from customers, orders
+where customers.customerid=orders.customerid
+
+select * from suppliers
+where exists
+(select * from products
+where products.supplierid=suppliers.supplierid
+and products.price<20)
+order by SupplierName
+
+select distinct suppliername from products, suppliers
+where products.supplierid=suppliers.supplierid
+and products.price<20
+order by SupplierName
+
+select * from suppliers
+where not exists
+(select * from products
+where products.supplierid=suppliers.supplierid
+and products.price<20)
+order by SupplierName
+
+select * from products
+select * from order_details
+
+select * from products
+where productid=ANY(
+select productid from order_details
+where quantity=10)
+order by productname
+
+select distinct productname from products, order_details
+where order_details.productid=products.productid
+and order_details.quantity=10
+order by productname
+
+create procedure eftihis2 (@city nvarchar(30), @postalcode nvarchar(10))
+as
+select * from customers where city=@city and postalcode=@postalcode
+go
+
+exec eftihis2 @city='madrid', @postalcode='28023'
+
+create database test
+use test
+
+select name from master.sys.databases
+
+drop database test
+
+backup database projects to disk='D:\test\projects.bak'
+backup database projects to disk='D:\test\projects.bak' with differential
+
+select * into new_customers_table2 from customers where 1=0
+
+create table persons(
+personid int not null unique,
+lastname varchar(255),
+firstname varchar(255),
+address varchar(255),
+city varchar(255) default 'no value')
+
+create table persons2(
+personid int not null,
+lastname varchar(255),
+firstname varchar(255),
+address varchar(255),
+city varchar(255) default 'no value'
+constraint name1 unique (personid, lastname))
+
+IF (EXISTS (
+  SELECT * FROM INFORMATION_SCHEMA.TABLES 
+  WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'Twitch_game'))  
+  BEGIN
+      PRINT 'Database Table Exists'
+  END;
+ELSE
+  BEGIN
+      PRINT 'No Table in database'
+  END
+
+
+drop table new_customers_table2
+
+select * from new_customers_table
+truncate table new_customers_table
+
+alter table customers add eftihis2 int
+
+select * from customers
+
+alter table customers drop column eftihis2
+
+alter table customers alter column eftihis2 varchar(255)
+
+select * from persons2
+
+alter table persons2 add eftihis4 int
+
+alter table persons2 drop column eftihis3
+
+alter table persons2 alter column eftihis4 varchar(255) not null
+
+sp_rename 'persons2', 'persons4'
+
+select * from persons
+
+alter table persons add constraint df_name default 'unknown' for firstname
+
+alter table customers add city2 varchar(255) not null
+constraint df_city2 default 'athens' with values
+
+create table orders2(
+id int not null,
+ordernumber int not null,
+orderdate date default getdate()
+)
+
+select * from orders2
+
+insert into orders2 values (1, 12345, null)
+insert into orders2 values (2, 12346,'')
+insert into orders2 values (3, 12347,default)
+insert into orders2 values (4, 12348, '2022/05/13')
+
+alter table orders2 add orderdate2 datetime not null
+constraint df_orderdate2 default getdate() with values
+
+insert into orders2 values (4, 12348, default, default)
+insert into orders2 values (6, 12350, '2022/04/10', '2022/04/10 10:55')
+
+select * from orders2 where orderdate2='2022/04/10 10:55'
+
+create table orders3(
+orderid int not null primary key,
+ordernumber int not null,
+person_id int foreign key references persons(personid)
+)
+
+select * from persons
+insert into persons values (1,'kiop', 'eft', 'akrop', 'athens')
+
+select * from orders3
+
+insert into orders3 values (1, 12348,null)
+insert into orders3 values (2, 12349, 1)
+
+create table persons5(
+personid int not null identity(1,1) primary key,
+lastname varchar(255),
+firstname varchar(255),
+age int
+)
+
+select * from persons5
+insert into persons5 values ('kiop', 'eft', 34)
+
+create table sssw(
+id uniqueidentifier primary key default newid(),
+name nvarchar(200)
+)
+
+select * from sssw
+
+insert into sssw values (default, 'eft')
+insert into sssw values (default, 'pan')
+
+alter table persons5 add age2 int constraint chk_person check(age2>=18)
+
+select * from persons5
+
+insert into persons5 values ('kiop', 'laz', 36, 18)
+
+alter table persons5 add CONSTRAINT dummy1 UNIQUE (firstname, LastName)
+
+alter table persons5 drop CONSTRAINT dummy1
+
+create unique index dummy_index1 on persons5 (lastname, age)
+
+select lastname, age from persons5
+
+drop index persons5.dummy_index1
+
+create view [products above average price] as
+select productname, price from products
+where price=20
+
+alter view [products above average price] as
+select productname, price from products
+where price>(select avg(price) from products)
+
+select * from [products above average price]
+
+select ascii('eftihis')
+
+select ascii('customername')
+select ascii(customername) from customers
+
+select char(65)
+select nchar(65)
+
+select unicode('atlanta')
+
+select charindex('t', 'customet')
+
+select datalength(' atlanta ')
+
+select len(' atlanta ')
+
+select difference('juice', 'jucy')
+
+select soundex('juice'), soundex('jucy')
+
+declare @d datetime='12/1/2018'
+select format(@d, 'd', 'en-US'), format(@d, 'd', 'no')
+
+declare @from_date datetime='12/1/1955'
+declare @to_date datetime='12/1/1958'
+select * from employees where birthdate between @from_date and @to_date
+
+select format(123456789, '##-##-####')
+
+select customername, left(customername,5) from customers
+select customername, right(customername,5) from customers
+
+select lower('EFTIHIS')
+select upper('eftihis')
+
+select trim('#! ' from ' #elephant!!  ')
+
+select ltrim(' #elephant!!  ')
+
+select rtrim(' #elephant!!  ')
+
+select patindex('%his%', 'eftihisEFTIHISeftIHIs')
+
+select quotename('eftihis', '()')
+
+select replace('eftihis','f','')
+
+select replace(customername,'a','') from customers
+
+select translate('3*[4+8]+{6/2}', '[]{}', '()()')
+
+select stuff('sql tutorial', 1,4, 'SQL-')
+
+select stuff('sql tutorial',1,4,'')
+
+select replicate('sql',4)
+
+select reverse('sql tutorial')
+
+select substring('sql tutorial', 3, 8)
+
+select nullif(25,26)
+
+select 
+substring('sql, tutorial, new', 1, nullif(charindex(',', 'sql, tutorial, new'),0)-1)
+
+select 
+substring('sql, tutorial, new', nullif(charindex(',', 'sql, tutorial, new'),0)+1, len('sql, tutorial, new'))
+
+select parsename(replace('sql, tutorial, new', ',','.'),1)
+select parsename(replace('sql, tutorial, new', ',','.'),2)
+select parsename(replace('sql, tutorial, new', ',','.'),3)
+
+select abs(-5)
+
+select acos(0.25)
+select asin(0.25)
+select atan(0.25)
+
+select cos(0.25)
+select sin(0.25)
+select tan(0.25)
+
+select atn2(0.2, -0.5)
+
+select cot(6)
+
+select str(582678.452, 6, 2)
+select str(5826.452, 6, 2)
+
+select round(235.415,2)
+select round(235.415,2)
+select round(235.415,2,1)
+
+select ceiling(235.415)
+select floor(235.415)
+
+select degrees(1.5)
+select radians(1.5)
+
+select pi()
+select exp(0)
+select log(1,10)
+select log10(2)
+
+select power(4,2)
+select square(64)
+select sqrt(64)
+select rand()
+select sign(-4.2)
+
+select current_timestamp
+select getdate()
+
+create table sssw2(
+content varchar(255),
+create_at timestamp)
+
+select sysdatetime()
+select getutcdate()
+
+select current_user
+select session_user
+select user_name(2)
+select system_user
+
+select @@version
+select sessionproperty()
+
+select dateadd(month, -2, '2017/5/22')
+select dateadd(year, -2, '2017/5/22')
+select dateadd(dayofyear, -2, '2017/1/2')
+select dateadd(weekday, 5, '2017/1/2')
+select dateadd(week, 5, '2017/1/2')
+select dateadd(hour, 5, '2017/1/2')
+select dateadd(minute, 5, '2017/1/2')
+select dateadd(second, 5, '2017/1/2')
+select dateadd(millisecond, 5, '2017/1/2')
+
+select datediff(day, '2017/5/22', '2018/5/22')
+
+select datefromparts(2018,5,22)
+
+select datename(year, '2022/5/28')
+select datepart(year, '2022/5/28')
+
+select day('2022/5/28')
+select month('2022/5/28')
+select year('2022/5/28')
+
+select isdate('2022/5/28')
+select isdate('day')
+select isdate('2022')
+
+select isnumeric('2022')
+
+select coalesce(null, 50, 42, 'eftihis')
+
+select customerid from customers where cast(customerid as numeric) % 2 = 0
+
+select cast(25.65 as decimal(5,3))
+
+select convert(varchar, getdate(), 100)
+select convert(varchar, getdate(), 101)
+select convert(varchar, getdate(), 102)
+select convert(varchar, getdate(), 103)
+select convert(varchar, getdate(), 104)
+select convert(varchar, getdate(), 105)
+select convert(varchar, getdate(), 106)
+select convert(varchar, getdate(), 107)
+select convert(varchar, getdate(), 108)
+select convert(varchar, getdate(), 109)
+select convert(varchar, getdate(), 110)
+select convert(varchar, getdate(), 111)
+select convert(varchar, getdate(), 112)
+select convert(varchar, getdate(), 113)
+select convert(varchar, getdate(), 114)
+select convert(varchar, getdate(), 120)
+select convert(varchar, getdate(), 121)
+select convert(varchar, getdate(), 126)
+select convert(varchar, getdate(), 127)
+select convert(varchar, getdate(), 130)
+select convert(varchar, getdate(), 131)
